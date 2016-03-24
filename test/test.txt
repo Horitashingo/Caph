@@ -1,7 +1,5 @@
-c = 5
+Func(x)=y+y+z
+where y=x+x+x
+      z=3*x+x
 
-cin >> b
-
-a = 2
-
-cout << c + a + b
+cout << Func(3)
