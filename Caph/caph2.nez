@@ -1,0 +1,53 @@
+source = { S*  $(decl)  ( _ ('\r\n' / '\n') _ S+ $(decl) )* #Source}
+decl = iodecl / funcdecl / vardecl
+
+//iodecl's structure
+iodecl = in / out
+in = { 'cin' _ '>>' _ $target(name) #In}
+out = { 'cout' _ '<<' _ $target(value) #Out}
+
+//funcdecl's leftside tree
+funcdecl = { $name(name) '(' _ $arglist(arglist) _ ')' _ $returnlist(returnlist) _ $where(whereblock)? _ #Funcdecl}
+name = { !keyword ([a-z] / [A-Z])+ ([0-9] / [a-z] / [A-Z] / '_')* #Name}
+arglist = {$arg(name) _ (',' _ $arg(name))* #Arglist}
+arglist2 = {$arg2(value) _ (',' _ $arg2(value))* #Arglist2}
+returnlist = { ($return(return) ( ('\r\n' / '\n') $return(return))* ('\r\n' / '\n'))? $othwiseret(othwiseret) #Returnlist}
+return = { _ '=' _ $retval(value) _ '[' _ $retcase(returncase) _ ']' _ #Return}
+othwiseret = { _ '=' _ $retval(value) ( _ '['_ 'otherwise' _ ']' )? #OthwiseRet}
+returncase = exp {$left _ ',' _ $right(exp) #Returncase}*
+whereblock = { ('\r\n' / '\n') _ 'where' _ $where_decl(vardecl / funcdecl)  ( _ ('\r\n' / '\n') _ $where_decl( vardecl / funcdecl ))* #Where}
+
+//needless
+type = elemtype
+elemtype= {'Int' / 'Bool' #Elemtype}
+
+//functioncall
+funcCall = { $name(name) '(' _ $arglist(arglist2) _ ')' #FuncCall}
+
+//value
+value = exp
+
+//vardecl tree
+vardecl = { $name(name) _ '=' _  $value(value) #Vardecl}
+
+exp = exp0 {$left ( _ ('&&' #And / '||' #Or) _ $right(exp0)) }*
+exp0 = exp1 {$left ( _ ('==' #Equals / '!=' #NotEquals) _ $right(exp1)) }*
+exp1 = exp6 {$left ( _ ('<=' #LessThanEquals / '<' #LessThan / '>=' #GreaterThanEquals / '>' #GreaterThan) _ $right(exp6)) }*
+exp6 = exp7 {$left ( _ ('+' #Add / '-' #Sub) _ $right(exp7)) }*
+exp7 = exps {$left ( _ ('*' #Mul) _ $right(exps)) }*
+exps =  '(' _ exp _ ')' / nil / false / true / numeral / funcCall / name / unop $(exps)
+
+unop = {'-' #Minus} / {'!' #Not}
+
+//tarminal element
+numeral = integer
+integer = {([1-9] [0-9]* / '0') #Int}
+nil = {'nil' #Nil}
+false = {'false' #False}
+true = {'true' #True}
+
+// keywords
+keyword = 'otherwise' / 'Int'/ 'Bool' / 'nil' / 'true' / 'false' / 'where' / 'cin' / 'cout'
+
+S = [ \t\n\r]
+_ = [ \t]*

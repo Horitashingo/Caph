@@ -1,0 +1,28 @@
+fibo(n) = 0 [ n == 0 , m == 1 ]
+        = 1 [ n == 1 ]
+        = fibo(n-1) + fibo(n-2)
+where m = 1
+
+cout << fibo(10)
+
+cout << fibo(5)
+
+n = fibo(5)
+
+cout << n
+
+calc(n, m, l) = nml * mul(n, m, l)
+where nml = n + m + l
+      mul(n, m, l) = n * m * l
+
+cout << calc(1, 1 * 2, 1 + 4)
+
+t = true
+
+f = false
+
+cout << t && !f
+
+cin >> d
+
+cout << d

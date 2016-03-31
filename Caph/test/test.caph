@@ -1,0 +1,33 @@
+cout << (\n m ~> ((\x ~> x + 1) n) + ((\y ~> y + 1) m) ) ((\l ~> l + l) 2) ((\a b c d e -> 2) 1+1+1 2+2+2 3+3+3 4+4+4 5+5+5)
+
+cout << 1 + 2 + 3
+
+fibo(n) = 0 [n == 0]
+        = 1 [n == 1]
+        = fibo(n-1) + fibo(n-2)
+        
+cout << fibo(7)
+
+cout << fibo(6)
+
+gg = 1
+
+yy = 2
+
+hh ~= (gg + 1) + yy
+
+cout << hh
+
+hoge(a, b, c) ~= ((\x y ~> x + y)a b) + c [ a < 5 ]
+               = a * b + c                [ b < 5 ]
+              ~= a + b * c                [ c < 5 ]
+               = piyo(a,b,c) - huga       [ otherwise ]
+               where piyo(l, m, n) = l + m + n
+                     huga = (\e f g -> e + f + g)a b c
+
+
+cout << hoge(6, 1, -5)
+
+cout << hoge(1, 4, -3)
+
+cout << hoge(6, 6, 6)
